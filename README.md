@@ -8,7 +8,8 @@
   - `p1-ar-1..6` الصف الأول الإعدادى (عربى) — الهندسة
   - `p1-en-1..6` First Preparatory (English) — Geometry
   - `p2-ar-1..6` الصف الثانى الإعدادى — الهندسة
-  - `p5-ar-1..3` الصف الخامس الابتدائى — الضرب والقسمة
+  - `times-table` جدول الضرب — لكل الصفوف
+  - `p5-ar-1..2` الصف الخامس الابتدائى — ضرب وقسمة الأعداد الصحيحة والكسور العشرية
 
 الرفع: ارفع محتويات المجلد كما هى إلى جذر الـ repo ثم فعّل GitHub Pages (Settings → Pages → Branch: main / root).
 الرابط بعد التفعيل: https://mostafadarsfele3ba-prog.github.io/ahmedtharwat/
