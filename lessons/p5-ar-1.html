@@ -259,8 +259,10 @@ body { font-family: 'Tajawal', sans-serif; background: linear-gradient(180deg,#e
 .gseg { position: relative; display: inline-block; padding-top: .45em; line-height: 1.1; }
 .gseg::before { content: ""; position: absolute; top: .18em; left: 1px; right: 1px; border-top: 2px solid currentColor; }
 .q-fig { display: flex; justify-content: center; margin: 0 auto 14px; }
-.q-fig svg { width: 100%; max-width: 330px; height: auto; max-height: 230px; background: #fff; border-radius: 12px; border: 2px solid #e0e7ff; }
+.q-fig svg { direction: ltr; unicode-bidi: isolate; width: 100%; max-width: 330px; height: auto; max-height: 230px; background: #fff; border-radius: 12px; border: 2px solid #e0e7ff; }
 .q-fig-sm svg { max-width: 300px; max-height: 185px; }
+.q-fig svg[viewBox="0 0 300 300"] { max-width: 300px; max-height: 300px; }
+.q-fig-sm svg[viewBox="0 0 300 300"] { max-height: 210px; }
 .mil-wrap .q-fig svg { border-color: #facc15; }
 .q-img { max-height: 230px; display: block; margin: 0 auto 14px; }
 .q-img-sm { max-height: 150px; max-width: 100%; margin: 8px auto 0; border-radius: 10px; background: #fff; object-fit: contain; }
@@ -477,6 +479,7 @@ body { font-family: 'Tajawal', sans-serif; background: linear-gradient(180deg,#e
 
 <script>
 const IMGS = {};
+const FIGS = {};
 const WHATSAPP = "201140486477";
 const TEACHER_AR = { name: "مستر أحمد ثروت", sub: "برنس الرياضيات" };
 const TEACHER_EN = { name: "M.ahmedtharwat", sub: "Princess math" };
@@ -563,7 +566,7 @@ const PER_GAME = 20;
 // √[x]   => جذر تربيعى بالشكل المعتاد (علامة الجذر وخط فوق ما تحت الجذر)
 function escapeHtml(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 const TK_OPEN = "", TK_CLOSE = "";
-const MATH_RUN = /[0-9A-Za-z(−\-+|∠√][0-9A-Za-z.,:×÷+\-−=<>≤≥≠\/()°%′″²³₁₂ ∩∪∈∉⊂⊥∥//≅△Δ~φ|∠√{}]*[0-9A-Za-z)°%′″²³₁₂φ|}]|[0-9A-Za-z]/g;
+const MATH_RUN = /[0-9A-Za-z(−\-+|∠√Δ△][0-9A-Za-z.,:×÷+\-−=<>≤≥≠\/()°%′″²³₁₂ ∩∪∈∉⊂⊥∥//≅△Δ~φ|∠√{}]*[0-9A-Za-z)°%′″²³₁₂φ|}]|[0-9A-Za-z]/g;
 function fmt(raw) {
     if (raw === undefined || raw === null) return '';
     const store = [];
@@ -663,7 +666,8 @@ const $id = id => document.getElementById(id);
 function shuffleArray(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function praise() { return T.praise[Math.floor(Math.random() * T.praise.length)]; }
 function imgHtml(q, small) {
-    if (q.svg) return `<div class="q-fig${small ? ' q-fig-sm' : ''}">${q.svg}</div>`;
+    const sv = q.svg || (q.fig && FIGS[q.fig]);
+    if (sv) return `<div class="q-fig${small ? ' q-fig-sm' : ''}">${sv}</div>`;
     if (q.img && IMGS[q.img]) return `<img class="${small ? 'q-img-sm' : 'q-img'} block" src="${IMGS[q.img]}" alt="">`;
     return '';
 }
@@ -731,7 +735,7 @@ function pickQuestions(type) {
         return rounds;
     }
     const out = [], seen = new Set();
-    for (const q of src) { const k = q.q || q.text; if (seen.has(k)) continue; seen.add(k); out.push(q); if (out.length === PER_GAME) break; }
+    for (const q of src) { const k = (q.q || q.text) + (q.svg || q.fig || '') + (q.img || ''); if (seen.has(k)) continue; seen.add(k); out.push(q); if (out.length === PER_GAME) break; }
     if (type === 'millionaire') out.sort((a, b) => (a.d || 1) - (b.d || 1)); // تدرج الصعوبة
     return out;
 }
